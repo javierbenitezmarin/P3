@@ -8,6 +8,7 @@
 #include "wavfile_mono.h"
 #include "pitch_analyzer.h"
 
+
 #include "docopt.h"
 
 #define FRAME_LEN   0.030 /* 30 ms. */
@@ -55,14 +56,19 @@ int main(int argc, const char *argv[]) {
     return -2;
   }
 
-  /*std::ofstream f("m.txt");
+  std::ofstream f("m.txt");
     for(vector<float>::const_iterator i = x.begin(); i != x.end(); ++i) {
      f << *i*rate*2 << '\n';
     }
-  
-  //Para calcular la autocorrelacion de la señal total
-  std::ofstream fr("r.txt");
-    vector<float> r(x.size());
+
+  int n_len = rate * FRAME_LEN;
+  int n_shift = rate * FRAME_SHIFT;
+
+  // Define analyzer
+  PitchAnalyzer analyzer(n_len, rate, PitchAnalyzer::HAMMING, 50, 500);
+
+    std::ofstream fr("r.txt");
+    vector<float> r;
     for (unsigned int l = 0; l < r.size(); ++l)
     {
       /// \TODO Compute the autocorrelation r[l]
@@ -79,25 +85,10 @@ int main(int argc, const char *argv[]) {
     for(vector<float>::const_iterator i = r.begin(); i != r.end(); ++i) {
      fr << *i << '\n';
     }
-*/
-  int n_len = rate * FRAME_LEN;
-  int n_shift = rate * FRAME_SHIFT;
 
-  // Define analyzer
-  PitchAnalyzer analyzer(n_len, rate, PitchAnalyzer::HAMMING, 50, 500);
+    float pitch = analyzer(x);
 
-  /// \TODO
-  /// Preprocess the input signal in order to ease pitch estimation. For instance,
-  /// central-clipping or low pass filtering may be used.
   
-  // Iterate for each frame and save values in f0 vector
-  vector<float>::iterator iX;
-  vector<float> f0;
-
-  for (iX = x.begin(); iX + n_len < x.end(); iX = iX + n_shift) {
-    float f = analyzer(iX, iX + n_len);
-    f0.push_back(f);
-  }
 
   /// \TODO
   /// Postprocess the estimation in order to supress errors. For instance, a median filter
@@ -110,9 +101,8 @@ int main(int argc, const char *argv[]) {
     return -3;
   }
 
-  os << 0 << '\n'; //pitch at t=0
-  for (iX = f0.begin(); iX != f0.end(); ++iX) 
-    os << *iX << '\n';
+  os << 0 << '\n'; //pitch at t=0 
+  os << pitch << ' ' << rate/pitch;
   os << 0 << '\n';//pitch at t=Dur
 
   return 0;
