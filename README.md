@@ -68,6 +68,8 @@ JAVI
 	
 	Como hemos indicado anteriormente, usando *únicamente* el criterio de *r1norm* no teníamos unos buenos resultados. Así que, para mejorar el sistema, decidimos usar 3 criterios: potencia, *r1norm* y *rmaxnorm*. Primero, comprobamos si la potencia es mayor de -10, luego si *r1norm* es mayor de 0.95 y, finalmente, si *rmaxnorm* es mayor de 0.5.
 	
+	![imagen](https://user-images.githubusercontent.com/80445330/115998557-11872f80-a5e8-11eb-84af-b79a766bd3e0.png)
+
 	Cuando hemos comprobado los tres criterios, afirmaremos que la trama es sonora, si cumple, al menos, dos de esos tres criterios, y, con los umbrales adecuados, llegamos a un 89% en el score final. Como vemos ya es un resultado bueno, pero decidimos añadir un criterio más para mejorarlo.
 	
 	Cambiaremos el valor máximo de la frecuencia de pitch a elegir, es decir, si la frecuencia de pitch elegida es mayor que 375 Hz, decidiremos *unvoiced*. 
