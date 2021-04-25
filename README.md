@@ -21,12 +21,26 @@ Ejercicios básicos
 
 	 NOTA: es más que probable que tenga que usar Python, Octave/MATLAB u otro programa semejante para
 	 hacerlo. Se valorará la utilización de la librería matplotlib de Python.
-	JOAN
+	
+	![image](https://user-images.githubusercontent.com/80445439/115993480-37560980-a5d3-11eb-9348-91d902756a0c.png)
+
+	Como podemos observar en las gráficas, hemos usado un segmento de 30 ms con un fonema sonoro (concretamente, el fonema /m/) y lo hemos representado en Python, con la librería *matplotlib*. Después hemos hecho subplot de su autocorrelación y hemos encontrado el primer máximo en 6.99 ms, lo que significa que, según este criterio, **la frecuencia pitch es de 143 Hz** aproximadamente.
+	
    * Determine el mejor candidato para el periodo de pitch localizando el primer máximo secundario de la
      autocorrelación. Inserte a continuación el código correspondiente.
 	JAVI
    * Implemente la regla de decisión sonoro o sordo e inserte el código correspondiente.
-	JOAN
+   
+	El primer criterio que hemos usado para decidir si un segmento es sordo o sonoro ha sido el cálculo de r[1]/r[0], que es el cociente del segundo valor de la autocorrelación entre la potencia de la señal, es decir, se comparan dos muestras muy próximas. En nuestro caso, ese valor está guardado en la variable *r1norm*. 
+	
+	![image](https://user-images.githubusercontent.com/80445439/115993729-6456ec00-a5d4-11eb-90be-1a53f1c0dcf4.png)
+
+
+Como se observa, asignamos el umbral decsior a 0.95; es decir, si *r1norm* supera este valor, asumiremos que es una trama sonora, y si no lo supera, una trama sorda. 
+
+Usando únicamente este criterio, tenemos un score del 80%, lo que nos indica que tenemos que mejorar este criterio, como realizaremos más adelante.
+
+
 - Una vez completados los puntos anteriores, dispondrá de una primera versión del detector de pitch. El 
   resto del trabajo consiste, básicamente, en obtener las mejores prestaciones posibles con él.
 
@@ -49,8 +63,22 @@ JAVI
   
   * Optimice los parámetros de su sistema de detección de pitch e inserte una tabla con las tasas de error
     y el *score* TOTAL proporcionados por `pitch_evaluate` en la evaluación de la base de datos 
-	`pitch_db/train`..
-	JOAN 375 XBOX ONE
+	`pitch_db/train`.
+	
+	
+	Como hemos indicado anteriormente, usando *únicamente* el criterio de *r1norm* no teníamos unos buenos resultados. Así que, para mejorar el sistema, decidimos usar 3 criterios: potencia, *r1norm* y *rmaxnorm*. Primero, comprobamos si la potencia es mayor de -10, luego si *r1norm* es mayor de 0.95 y, finalmente, si *rmaxnorm* es mayor de 0.5.
+	
+	Cuando hemos comprobado los tres criterios, afirmaremos que la trama es sonora, si cumple, al menos, dos de esos tres criterios, y, con los umbrales adecuados, llegamos a un 89% en el score final. Como vemos ya es un resultado bueno, pero decidimos añadir un criterio más para mejorarlo.
+	
+	Cambiaremos el valor máximo de la frecuencia de pitch a elegir, es decir, si la frecuencia de pitch elegida es mayor que 375 Hz, decidiremos *unvoiced*. 
+	
+	![image](https://user-images.githubusercontent.com/80445439/115994217-573afc80-a5d6-11eb-8a72-e4389be864a9.png)
+
+	Con esta última mejora, conseguimos un score del 90.58%, que es un valor muy adecuado para nuestro sistema.
+
+	![image](https://user-images.githubusercontent.com/80445439/115994245-76d22500-a5d6-11eb-81dc-3cfa06ba4a5c.png)	
+	
+	
    * Inserte una gráfica en la que se vea con claridad el resultado de su detector de pitch junto al del
      detector de Wavesurfer. Aunque puede usarse Wavesurfer para obtener la representación, se valorará
 	 el uso de alternativas de mayor calidad (particularmente Python).
