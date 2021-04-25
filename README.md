@@ -14,7 +14,10 @@ Ejercicios básicos
   `get_pitch`.
 
    * Complete el cálculo de la autocorrelación e inserte a continuación el código correspondiente.
-	JAVI
+
+	![imagen](https://user-images.githubusercontent.com/80445330/115998590-367ba280-a5e8-11eb-9d4e-0ea20f443cb8.png)
+	Esta es una manera efectiva de implementar la función típica de autocorrelación. 
+	
    * Inserte una gŕafica donde, en un *subplot*, se vea con claridad la señal temporal de un segmento de
      unos 30 ms de un fonema sonoro y su periodo de pitch; y, en otro *subplot*, se vea con claridad la
 	 autocorrelación de la señal y la posición del primer máximo secundario.
@@ -28,7 +31,11 @@ Ejercicios básicos
 	
    * Determine el mejor candidato para el periodo de pitch localizando el primer máximo secundario de la
      autocorrelación. Inserte a continuación el código correspondiente.
-	JAVI
+	
+	![imagen](https://user-images.githubusercontent.com/80445330/115998604-485d4580-a5e8-11eb-8357-b4a2347294bb.png)
+	
+	Este algoritmo recorre los valores de la autocorrelación desde un mínimo hasta un máximo decididos arbitrariamente. Y guarda el valor del índice de la autocorrelación donde encuentre el máximo local.
+	
    * Implemente la regla de decisión sonoro o sordo e inserte el código correspondiente.
    
 	El primer criterio que hemos usado para decidir si un segmento es sordo o sonoro ha sido el cálculo de r[1]/r[0], que es el cociente del segundo valor de la autocorrelación entre la potencia de la señal, es decir, se comparan dos muestras muy próximas. En nuestro caso, ese valor está guardado en la variable *r1norm*. 
@@ -56,7 +63,12 @@ Usando únicamente este criterio, tenemos un score del 80%, lo que nos indica qu
 
 	    Recuerde configurar los paneles de datos para que el desplazamiento de ventana sea el adecuado, que
 		en esta práctica es de 15 ms.
-JAVI
+	
+	Para conseguir los valores que nos interesan de cada trama (r1norm, pot y rmaxnorm), decidimos guardarlos en un fichero llamado 'features.txt' cada vez que se invocaba desde el programa principal a la función que calcula estos valores. De esta forma, podemos visualizar en el wavesurfer, la forma de onda de la imagen, el controno de pitch, y en otro panel, estas tres medidas superpuestas. Utilizando la rata, podemos hacer un estudio de cuáles son los valores que determinan cuando una trama es sonora o sorda.
+	
+	![imagen](https://user-images.githubusercontent.com/80445330/115998813-5495d280-a5e9-11eb-8851-67d9ae2ea915.png)
+
+	En el panel superior tenemos la potencia de cada trama (en color negro), rmaxnorm (en color rojo) y r1norm (en color azul). Al haberlos puesto todos en un mismo panel, como las dos últimas características son normalizadas, quedan poco visibles, pero esto no es un problema, ya que el wavesurfer nos da el valor de cada una cuando pasamos la rata por encima del punto que nos interesa. De esta forma hemos podido determinar unos valores aproximados para mejorar nuestro sistema de detección.
       - Use el detector de pitch implementado en el programa `wavesurfer` en una señal de prueba y compare
 	    su resultado con el obtenido por la mejor versión de su propio sistema.  Inserte una gráfica
 		ilustrativa del resultado de ambos detectores.
@@ -84,7 +96,11 @@ JAVI
    * Inserte una gráfica en la que se vea con claridad el resultado de su detector de pitch junto al del
      detector de Wavesurfer. Aunque puede usarse Wavesurfer para obtener la representación, se valorará
 	 el uso de alternativas de mayor calidad (particularmente Python).
-   	JAVI 
+  	El resultado final es este:
+	
+	![imagen](https://user-images.githubusercontent.com/80445330/115998905-dbe34600-a5e9-11eb-9c8e-592f3e99076e.png)
+
+	El pitch detectado por nuestro programa es el que está en el panel superior. Si lo comparamos con la detección que hace wavesurfer, podemos ver que se acerca mucho. Si nos decidiéramos por implementar medidas de mejora, como un pre y post-procesado, el programa cada vez se acercaría más a unos resultados mejores. 
 
 Ejercicios de ampliación
 ------------------------
